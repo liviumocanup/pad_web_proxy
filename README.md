@@ -31,7 +31,7 @@ Real-life examples:
 - **Cache** - Used to store frequently accessed data, reducing the load on the databases and services and increasing response times. For example, frequently accessed tracks or user profiles can be cached.
 - **Load Balancer** - Distributes incoming client requests across multiple instances of the services to ensure even load distribution and high availability. While the API Gateway can handle basic load balancing, a dedicated load balancer can offer more advanced strategies and handle higher loads.
 
-![Diagram](https://github.com/liviumocanup/pad_web_proxy/blob/main/diagrams/initial_diagram.png)
+![Diagram](https://github.com/liviumocanup/pad_web_proxy/blob/main/diagrams/no_lb_diagram.png)
 
 ### Technology Stack 
 - **User Service**:
