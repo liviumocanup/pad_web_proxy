@@ -1,0 +1,40 @@
+syntax = "proto3";
+
+import "google/protobuf/empty.proto";
+
+option go_package = "user_service/proto";
+
+service UserService {
+  rpc Register(UserRequest) returns (google.protobuf.Empty);
+  rpc Login(UserRequest) returns (JWT);
+  rpc Validate(JWT) returns (UserResponse);
+  rpc FindById(IdRequest) returns (UserResponse);
+  rpc FindByUsername(UsernameRequest) returns (UserResponse);
+  rpc FindAll(google.protobuf.Empty) returns (UserListResponse);
+}
+
+message UserRequest {
+  string username = 1;
+  string password = 2;
+}
+
+message IdRequest {
+  string id = 1;
+}
+
+message UsernameRequest {
+  string username = 1;
+}
+
+message UserResponse {
+  string id = 1;
+  string username = 2;
+}
+
+message JWT {
+  string token = 1;
+}
+
+message UserListResponse {
+  repeated UserResponse users = 1;
+}

@@ -1,0 +1,11 @@
+grpcport: ":50051"
+httpport: ":8080"
+
+dbhost: "localhost"
+dbport: 3306
+dbuser: "liviu"
+dbpassword: "1234"
+dbname: "usersdb"
+
+jwtsecret: "pad-super-secret-key"
+jwtduration: 42
