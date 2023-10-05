@@ -13,7 +13,7 @@ import (
 )
 
 func NewGrpcServer(cfg *config.Config, userService services.UserService) (*grpc.Server, net.Listener, error) {
-	log.Println("Creating new gRPC server")
+	log.Println("Creating new gRPC server for user service")
 
 	server := &grpcServer{
 		userService: userService,

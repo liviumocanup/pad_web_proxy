@@ -1,0 +1,42 @@
+syntax = "proto3";
+
+import "google/protobuf/empty.proto";
+
+option go_package = "track_service/proto";
+
+service TrackService {
+  rpc Upload(TrackMetadata) returns (TrackResponse);
+  rpc GetInfoById(IdRequest) returns (TrackInfoResponse);
+  rpc EditInfo(EditTrackRequest) returns (google.protobuf.Empty);
+  rpc DeleteById(IdRequest) returns (google.protobuf.Empty);
+}
+
+message TrackMetadata {
+  string title = 1;
+  string artist = 2;
+  string album = 3;
+  string genre = 4;
+}
+
+message IdRequest {
+  string id = 1;
+}
+
+message TrackResponse {
+  string trackId = 1;
+  string url = 2;
+}
+
+message TrackInfoResponse {
+  string trackId = 1;
+  string title = 2;
+  string artist = 3;
+  string album = 4;
+  string genre = 5;
+  string url = 6;
+}
+
+message EditTrackRequest {
+  string trackId = 1;
+  TrackMetadata metadata = 2;
+}

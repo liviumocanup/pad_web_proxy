@@ -1,0 +1,11 @@
+grpcport: ":50052"
+httpport: ":8081"
+
+dbhost: "localhost"
+dbport: 5432
+dbuser: "liviu"
+dbpassword: "1234"
+dbname: "tracksdb"
+
+jwtsecret: "pad-super-secret-key-2"
+jwtduration: 42

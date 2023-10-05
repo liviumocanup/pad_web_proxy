@@ -1,0 +1,11 @@
+grpcport: ":50053"
+httpport: ":8082"
+
+dbhost: "localhost"
+dbport: 5432
+dbuser: "liviu"
+dbpassword: "1234"
+dbname: "playbackdb"
+
+jwtsecret: "pad-super-secret-key-3"
+jwtduration: 42

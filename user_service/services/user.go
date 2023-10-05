@@ -145,5 +145,4 @@ func (s *userService) FindAll(ctx context.Context) ([]*models.UserResponse, erro
 }
 
 // The following method is required by the newer versions of grpc for forward compatibility.
-// You can leave the method body empty.
 func (s *userService) mustEmbedUnimplementedUserServiceServer() {}

@@ -5,6 +5,8 @@ from models.user_service import UserRequest, JWT
 from generated import user_pb2, user_pb2_grpc
 import grpc
 
+from services import cache
+
 
 def get_user_stub():
     channel = grpc.insecure_channel("localhost:50051")
@@ -61,12 +63,25 @@ def validate(request: JWT):
 
 @handle_grpc_error
 def find_by_id(user_id: str):
+    # Attempt to fetch from cache first
+    cached_user = cache.get(user_id)
+    if cached_user:
+        return cached_user
+
     stub = get_user_stub()
     grpc_request = user_pb2.IdRequest(id=user_id)
     try:
         response = stub.FindById(grpc_request)
-        return {"id": response.id, "username": response.username}
+
+        # If the user is found, store it in the cache.
+        # Note: The cache value is serialized as a string.
+        user_data = {"id": response.id, "username": response.username}
+        cache.set(user_id, str(user_data))
+
+        return user_data
     except grpc.RpcError as e:
+        # invalidate the cache for that user_id (if exists).
+        cache.delete(user_id)
         raise HTTPException(status_code=400, detail=e.details())
 
 
