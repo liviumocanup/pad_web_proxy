@@ -1,0 +1,8 @@
+grpc
+botocore
+boto3
+fastapi
+google.protobuf
+redis
+pydantic
+uvicorn

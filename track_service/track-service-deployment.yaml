@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: track-service-deployment
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: track-service
+  template:
+    metadata:
+      labels:
+        app: track-service
+    spec:
+      containers:
+        - name: track-service-container
+          image: emporion97/track-service:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 50052

@@ -1,9 +1,9 @@
 grpcport: ":50053"
 httpport: ":8082"
-trackhost: "localhost"
+trackhost: "track-service"
 trackgrpcport: ":50052"
 
-dbhost: "localhost"
+dbhost: "p-postgres"
 dbport: 5432
 dbuser: "liviu"
 dbpassword: "1234"

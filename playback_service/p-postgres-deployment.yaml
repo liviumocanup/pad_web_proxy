@@ -1,0 +1,63 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: p-postgres
+spec:
+  ports:
+    - port: 5432
+  selector:
+    app: p-postgres
+  clusterIP: None
+
+---
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: p-postgres-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: p-postgres-deployment
+spec:
+  selector:
+    matchLabels:
+      app: p-postgres
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: p-postgres
+    spec:
+      containers:
+        - image: postgres:13
+          name: p-postgres
+          env:
+            - name: POSTGRES_USER
+              value: "liviu"
+            - name: POSTGRES_PASSWORD
+              value: "1234"
+            - name: POSTGRES_DB
+              value: "playbackdb"
+          ports:
+            - containerPort: 5432
+              name: p-postgres
+          volumeMounts:
+            - name: p-postgres-persistent-storage
+              mountPath: /var/lib/postgresql/data
+      volumes:
+        - name: p-postgres-persistent-storage
+          persistentVolumeClaim:
+            claimName: p-postgres-pvc
+
+

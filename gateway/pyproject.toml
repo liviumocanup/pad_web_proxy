@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "gateway"
+version = "0.1.0"
+description = ""
+authors = ["Liviu <liviumocanu20009@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+botocore = "^1.31.64"
+boto3 = "^1.28.64"
+fastapi = "^0.103.2"
+protobuf = "^4.24.4"
+redis = "^5.0.1"
+pydantic = "^2.4.2"
+grpcio = "^1.59.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

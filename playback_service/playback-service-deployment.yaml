@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: playback-service-deployment
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: playback-service
+  template:
+    metadata:
+      labels:
+        app: playback-service
+    spec:
+      containers:
+        - name: playback-service-container
+          image: emporion97/playback-service:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 50053
