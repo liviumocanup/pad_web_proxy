@@ -2,6 +2,7 @@ package config
 
 import (
 	"log"
+	"time"
 
 	"github.com/spf13/viper"
 )
@@ -18,6 +19,9 @@ type Config struct {
 
 	JWTSecret   string
 	JWTDuration int
+
+	RequestTimeout  time.Duration `yaml:"requestTimeout"`
+	ConcurrentLimit int           `yaml:"concurrentLimit"`
 }
 
 func LoadConfig() (*Config, error) {

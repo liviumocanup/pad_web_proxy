@@ -1,0 +1,59 @@
+syntax = "proto3";
+
+import "google/protobuf/empty.proto";
+import "common.proto";
+
+option go_package = "playback_service/proto";
+
+service PlaybackService {
+  rpc CreatePlaylist(CreatePlaylistRequest) returns (PlaylistResponse);
+  rpc RemovePlaylist(RemovePlaylistRequest) returns (google.protobuf.Empty);
+  rpc AddTracksToPlaylist(AddTracksToPlaylistRequest) returns (google.protobuf.Empty);
+  rpc RemoveTracksFromPlaylist(RemoveTracksFromPlaylistRequest) returns (google.protobuf.Empty);
+  rpc GetPlaylistById(PlaylistIdRequest) returns (PlaylistResponse);
+  rpc PlayPlaylist(PlaylistIdRequest) returns (PlayPlaylistResponse);
+  rpc Status(google.protobuf.Empty) returns (common.StatusResponse);
+}
+
+message CreatePlaylistRequest {
+  string name = 1;
+  string userId = 2;
+}
+
+message PlaylistIdRequest {
+  string playlistId = 1;
+}
+
+message RemovePlaylistRequest {
+  string playlistId = 1;
+  string userId = 2;
+}
+
+message AddTracksToPlaylistRequest {
+  string playlistId = 1;
+  repeated string trackIds = 2;
+  string userId = 3;
+}
+
+message RemoveTracksFromPlaylistRequest {
+  string playlistId = 1;
+  repeated string trackIds = 2;
+  string userId = 3;
+}
+
+message PlaylistResponse {
+  string playlistId = 1;
+  string name = 2;
+  repeated common.TrackMetadata tracks = 3;
+}
+
+message TrackPlayMetadata {
+  string trackId = 1;
+  string title = 2;
+  string url = 3;
+}
+
+message PlayPlaylistResponse {
+  string playlistName = 1;
+  repeated TrackPlayMetadata tracks = 2;
+}

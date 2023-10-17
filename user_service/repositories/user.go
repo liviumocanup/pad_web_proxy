@@ -10,6 +10,7 @@ type UserRepository interface {
 	Create(user *models.User) error
 	FindByUsername(username string) (*models.User, error)
 	FindByID(id string) (*models.User, error)
+	Delete(id string) error
 	FindAll() ([]*models.User, error)
 }
 
@@ -47,6 +48,9 @@ func (repo *userRepository) FindByID(id string) (*models.User, error) {
 	return &user, nil
 }
 
+func (repo *userRepository) Delete(id string) error {
+	return repo.db.Delete(&models.User{}, "id = ?", id).Error
+}
 func (repo *userRepository) FindAll() ([]*models.User, error) {
 	var users []*models.User
 	err := repo.db.Find(&users).Error

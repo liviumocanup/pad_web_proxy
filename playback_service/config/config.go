@@ -2,13 +2,16 @@ package config
 
 import (
 	"log"
+	"time"
 
 	"github.com/spf13/viper"
 )
 
 type Config struct {
-	GRPCPort string
-	HTTPPort string
+	GRPCPort      string
+	HTTPPort      string
+	TrackHost     string
+	TrackGRPCPort string
 
 	DBHost     string
 	DBPort     int
@@ -18,6 +21,9 @@ type Config struct {
 
 	JWTSecret   string
 	JWTDuration int
+
+	RequestTimeout  time.Duration `yaml:"requestTimeout"`
+	ConcurrentLimit int           `yaml:"concurrentLimit"`
 }
 
 func LoadConfig() (*Config, error) {

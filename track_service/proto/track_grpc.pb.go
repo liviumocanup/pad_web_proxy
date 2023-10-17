@@ -3,6 +3,7 @@
 package proto
 
 import (
+	common "track_service/proto/common"
 	context "context"
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
@@ -19,10 +20,12 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type TrackServiceClient interface {
-	Upload(ctx context.Context, in *TrackMetadata, opts ...grpc.CallOption) (*TrackResponse, error)
-	GetInfoById(ctx context.Context, in *IdRequest, opts ...grpc.CallOption) (*TrackInfoResponse, error)
+	Upload(ctx context.Context, in *common.TrackMetadata, opts ...grpc.CallOption) (*TrackResponse, error)
+	GetInfoById(ctx context.Context, in *TrackIdRequest, opts ...grpc.CallOption) (*TrackInfoResponse, error)
 	EditInfo(ctx context.Context, in *EditTrackRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
-	DeleteById(ctx context.Context, in *IdRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	DeleteById(ctx context.Context, in *TrackIdRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	FindAll(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*TrackListResponse, error)
+	Status(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*common.StatusResponse, error)
 }
 
 type trackServiceClient struct {
@@ -33,7 +36,7 @@ func NewTrackServiceClient(cc grpc.ClientConnInterface) TrackServiceClient {
 	return &trackServiceClient{cc}
 }
 
-func (c *trackServiceClient) Upload(ctx context.Context, in *TrackMetadata, opts ...grpc.CallOption) (*TrackResponse, error) {
+func (c *trackServiceClient) Upload(ctx context.Context, in *common.TrackMetadata, opts ...grpc.CallOption) (*TrackResponse, error) {
 	out := new(TrackResponse)
 	err := c.cc.Invoke(ctx, "/TrackService/Upload", in, out, opts...)
 	if err != nil {
@@ -42,7 +45,7 @@ func (c *trackServiceClient) Upload(ctx context.Context, in *TrackMetadata, opts
 	return out, nil
 }
 
-func (c *trackServiceClient) GetInfoById(ctx context.Context, in *IdRequest, opts ...grpc.CallOption) (*TrackInfoResponse, error) {
+func (c *trackServiceClient) GetInfoById(ctx context.Context, in *TrackIdRequest, opts ...grpc.CallOption) (*TrackInfoResponse, error) {
 	out := new(TrackInfoResponse)
 	err := c.cc.Invoke(ctx, "/TrackService/GetInfoById", in, out, opts...)
 	if err != nil {
@@ -60,9 +63,27 @@ func (c *trackServiceClient) EditInfo(ctx context.Context, in *EditTrackRequest,
 	return out, nil
 }
 
-func (c *trackServiceClient) DeleteById(ctx context.Context, in *IdRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+func (c *trackServiceClient) DeleteById(ctx context.Context, in *TrackIdRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
 	out := new(emptypb.Empty)
 	err := c.cc.Invoke(ctx, "/TrackService/DeleteById", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *trackServiceClient) FindAll(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*TrackListResponse, error) {
+	out := new(TrackListResponse)
+	err := c.cc.Invoke(ctx, "/TrackService/FindAll", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *trackServiceClient) Status(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*common.StatusResponse, error) {
+	out := new(common.StatusResponse)
+	err := c.cc.Invoke(ctx, "/TrackService/Status", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -73,10 +94,12 @@ func (c *trackServiceClient) DeleteById(ctx context.Context, in *IdRequest, opts
 // All implementations must embed UnimplementedTrackServiceServer
 // for forward compatibility
 type TrackServiceServer interface {
-	Upload(context.Context, *TrackMetadata) (*TrackResponse, error)
-	GetInfoById(context.Context, *IdRequest) (*TrackInfoResponse, error)
+	Upload(context.Context, *common.TrackMetadata) (*TrackResponse, error)
+	GetInfoById(context.Context, *TrackIdRequest) (*TrackInfoResponse, error)
 	EditInfo(context.Context, *EditTrackRequest) (*emptypb.Empty, error)
-	DeleteById(context.Context, *IdRequest) (*emptypb.Empty, error)
+	DeleteById(context.Context, *TrackIdRequest) (*emptypb.Empty, error)
+	FindAll(context.Context, *emptypb.Empty) (*TrackListResponse, error)
+	Status(context.Context, *emptypb.Empty) (*common.StatusResponse, error)
 	mustEmbedUnimplementedTrackServiceServer()
 }
 
@@ -84,17 +107,23 @@ type TrackServiceServer interface {
 type UnimplementedTrackServiceServer struct {
 }
 
-func (UnimplementedTrackServiceServer) Upload(context.Context, *TrackMetadata) (*TrackResponse, error) {
+func (UnimplementedTrackServiceServer) Upload(context.Context, *common.TrackMetadata) (*TrackResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Upload not implemented")
 }
-func (UnimplementedTrackServiceServer) GetInfoById(context.Context, *IdRequest) (*TrackInfoResponse, error) {
+func (UnimplementedTrackServiceServer) GetInfoById(context.Context, *TrackIdRequest) (*TrackInfoResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetInfoById not implemented")
 }
 func (UnimplementedTrackServiceServer) EditInfo(context.Context, *EditTrackRequest) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method EditInfo not implemented")
 }
-func (UnimplementedTrackServiceServer) DeleteById(context.Context, *IdRequest) (*emptypb.Empty, error) {
+func (UnimplementedTrackServiceServer) DeleteById(context.Context, *TrackIdRequest) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteById not implemented")
+}
+func (UnimplementedTrackServiceServer) FindAll(context.Context, *emptypb.Empty) (*TrackListResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method FindAll not implemented")
+}
+func (UnimplementedTrackServiceServer) Status(context.Context, *emptypb.Empty) (*common.StatusResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Status not implemented")
 }
 func (UnimplementedTrackServiceServer) mustEmbedUnimplementedTrackServiceServer() {}
 
@@ -110,7 +139,7 @@ func RegisterTrackServiceServer(s grpc.ServiceRegistrar, srv TrackServiceServer)
 }
 
 func _TrackService_Upload_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(TrackMetadata)
+	in := new(common.TrackMetadata)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -122,13 +151,13 @@ func _TrackService_Upload_Handler(srv interface{}, ctx context.Context, dec func
 		FullMethod: "/TrackService/Upload",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(TrackServiceServer).Upload(ctx, req.(*TrackMetadata))
+		return srv.(TrackServiceServer).Upload(ctx, req.(*common.TrackMetadata))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
 func _TrackService_GetInfoById_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(IdRequest)
+	in := new(TrackIdRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -140,7 +169,7 @@ func _TrackService_GetInfoById_Handler(srv interface{}, ctx context.Context, dec
 		FullMethod: "/TrackService/GetInfoById",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(TrackServiceServer).GetInfoById(ctx, req.(*IdRequest))
+		return srv.(TrackServiceServer).GetInfoById(ctx, req.(*TrackIdRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -164,7 +193,7 @@ func _TrackService_EditInfo_Handler(srv interface{}, ctx context.Context, dec fu
 }
 
 func _TrackService_DeleteById_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(IdRequest)
+	in := new(TrackIdRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -176,7 +205,43 @@ func _TrackService_DeleteById_Handler(srv interface{}, ctx context.Context, dec 
 		FullMethod: "/TrackService/DeleteById",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(TrackServiceServer).DeleteById(ctx, req.(*IdRequest))
+		return srv.(TrackServiceServer).DeleteById(ctx, req.(*TrackIdRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _TrackService_FindAll_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(emptypb.Empty)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(TrackServiceServer).FindAll(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/TrackService/FindAll",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(TrackServiceServer).FindAll(ctx, req.(*emptypb.Empty))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _TrackService_Status_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(emptypb.Empty)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(TrackServiceServer).Status(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/TrackService/Status",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(TrackServiceServer).Status(ctx, req.(*emptypb.Empty))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -203,6 +268,14 @@ var TrackService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "DeleteById",
 			Handler:    _TrackService_DeleteById_Handler,
+		},
+		{
+			MethodName: "FindAll",
+			Handler:    _TrackService_FindAll_Handler,
+		},
+		{
+			MethodName: "Status",
+			Handler:    _TrackService_Status_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

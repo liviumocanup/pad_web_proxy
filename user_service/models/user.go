@@ -10,7 +10,7 @@ type UserRequest struct {
 	Password string `json:"password"`
 }
 
-type IdRequest struct {
+type UserIdRequest struct {
 	Id string `json:"id"`
 }
 

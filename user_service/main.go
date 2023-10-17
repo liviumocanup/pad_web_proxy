@@ -9,7 +9,6 @@ import (
 	"user_service/adapter"
 	"user_service/config"
 	"user_service/database"
-	"user_service/models"
 	"user_service/repositories"
 	"user_service/services"
 )
@@ -24,12 +23,11 @@ func main() {
 	if err != nil {
 		log.Fatalf("Error connecting to database: %v", err)
 	}
-	db.AutoMigrate(&models.User{})
 
 	userRepo := repositories.NewUserRepository(db)
 	userService := services.NewUserService(userRepo, cfg)
 
-	// Set up your gRPC server and register the UserService
+	// Set up gRPC server and register the UserService
 	grpcSrv, listener, err := adapter.NewGrpcServer(cfg, userService)
 	if err != nil {
 		log.Fatalf("Error creating gRPC server: %v", err)

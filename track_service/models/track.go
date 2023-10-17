@@ -7,6 +7,7 @@ type Track struct {
 	Album  string `gorm:"type:varchar(256);not_null" db:"album"`
 	Genre  string `gorm:"type:varchar(256);not_null" db:"genre"`
 	URL    string `gorm:"type:varchar(512)" db:"url"`
+	UserID string `gorm:"type:varchar(256);not_null" db:"user_id"`
 }
 
 type TrackMetadata struct {
@@ -14,15 +15,18 @@ type TrackMetadata struct {
 	Artist string `json:"artist"`
 	Album  string `json:"album"`
 	Genre  string `json:"genre"`
+	UserID string `json:"userId"`
+	URL    string `json:"url"`
 }
 
-type IdRequest struct {
+type TrackIdRequest struct {
 	Id string `json:"id"`
 }
 
 type TrackResponse struct {
 	TrackId string `json:"trackId"`
 	URL     string `json:"url"`
+	UserID  string `json:"userId"`
 }
 
 type TrackInfoResponse struct {
@@ -32,6 +36,7 @@ type TrackInfoResponse struct {
 	Album   string `json:"album"`
 	Genre   string `json:"genre"`
 	URL     string `json:"url"`
+	UserID  string `json:"userId"`
 }
 
 type EditTrackRequest struct {

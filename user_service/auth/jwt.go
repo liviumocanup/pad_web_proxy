@@ -5,62 +5,50 @@ import (
 	"fmt"
 	"github.com/golang-jwt/jwt/v5"
 	"time"
-	"user_service/models"
 )
 
-func GenerateToken(user *models.User, secretKey []byte, duration int) (string, error) {
-	username := user.Username
-
+func GenerateToken(userId uint, secretKey []byte, duration int) (string, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256,
 		jwt.MapClaims{
-			"username": username,
-			"exp":      time.Now().Add(time.Duration(duration) * time.Hour).Unix(),
+			"userId": userId,
+			"exp":    time.Now().Add(time.Duration(duration) * time.Hour).Unix(),
 		})
 
 	tokenString, err := token.SignedString(secretKey)
 	if err != nil {
+		println("Error generating signed string:", err)
 		return "", err
 	}
 
 	return tokenString, nil
 }
 
-func ValidateToken(tokenString string, secretKey []byte) (*models.User, error) {
+func ValidateToken(tokenString string, secretKey []byte) (uint, error) {
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 		return secretKey, nil
 	})
 
 	if err != nil {
-		return nil, err
+		fmt.Println("Error while parsing token:", err)
+		return 0, err
 	}
 
 	if !token.Valid {
-		return nil, fmt.Errorf("invalid token")
+		println("Token is not valid!")
+		return 0, fmt.Errorf("invalid token")
 	}
 
 	claims, ok := token.Claims.(jwt.MapClaims)
 	if !ok {
-		return nil, errors.New("couldn't parse claims")
+		println("couldn't parse claims!")
+		return 0, errors.New("couldn't parse claims")
 	}
 
-	idValue, ok := claims["id"]
+	userIdFloat, ok := claims["userId"].(float64)
 	if !ok {
-		return nil, errors.New("id claim not found")
+		println("userId claim is not of expected type!")
+		return 0, errors.New("userId claim is not of expected type")
 	}
 
-	id, ok := idValue.(float64) // JWT numeric values are decoded as float64
-	if !ok {
-		return nil, errors.New("id claim is not a uint")
-	}
-
-	user := &models.User{
-		ID:       uint(id),
-		Username: token.Claims.(jwt.MapClaims)["username"].(string),
-	}
-
-	print(user)
-	print(token.Claims.(jwt.MapClaims)["id"].(string))
-	print(token.Claims.(jwt.MapClaims)["username"].(string))
-
-	return user, nil
+	return uint(userIdFloat), nil
 }

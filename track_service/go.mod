@@ -4,9 +4,11 @@ go 1.21
 
 require (
 	github.com/golang/protobuf v1.5.3
+	github.com/rs/zerolog v1.31.0
 	github.com/spf13/viper v1.16.0
 	google.golang.org/grpc v1.55.0
 	google.golang.org/protobuf v1.31.0
+	gorm.io/driver/postgres v1.5.2
 	gorm.io/gorm v1.25.4
 )
 
@@ -19,6 +21,8 @@ require (
 	github.com/jinzhu/inflection v1.0.0 // indirect
 	github.com/jinzhu/now v1.1.5 // indirect
 	github.com/magiconair/properties v1.8.7 // indirect
+	github.com/mattn/go-colorable v0.1.13 // indirect
+	github.com/mattn/go-isatty v0.0.19 // indirect
 	github.com/mitchellh/mapstructure v1.5.0 // indirect
 	github.com/pelletier/go-toml/v2 v2.0.8 // indirect
 	github.com/spf13/afero v1.9.5 // indirect
@@ -33,5 +37,4 @@ require (
 	google.golang.org/genproto v0.0.0-20230410155749-daa745c078e1 // indirect
 	gopkg.in/ini.v1 v1.67.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
-	gorm.io/driver/postgres v1.5.2 // indirect
 )

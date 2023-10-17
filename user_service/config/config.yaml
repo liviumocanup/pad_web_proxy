@@ -9,3 +9,6 @@ dbname: "usersdb"
 
 jwtsecret: "pad-super-secret-key"
 jwtduration: 42
+
+requestTimeout: 5s
+concurrentLimit: 5

@@ -1,42 +1,15 @@
-from fastapi import FastAPI, Body
-from models import user_service
-from models.user_service import UserRequest, JWT
-from services import user_service
+from fastapi import FastAPI
+import uvicorn
+from routes import user_routes, track_routes, playback_routes
 
 app = FastAPI()
+user_router = user_routes.router
+track_router = track_routes.router
+playback_router = playback_routes.router
 
-
-@app.post("/user/register/")
-async def register_endpoint(request: UserRequest = Body(...)):
-    return user_service.register(request)
-
-
-@app.post("/user/login/")
-async def login_endpoint(request: UserRequest = Body(...)):
-    return user_service.login(request)
-
-
-@app.post("/user/validate/")
-async def validate_endpoint(request: JWT = Body(...)):
-    return user_service.validate(request)
-
-
-@app.get("/user/find_by_id/")
-async def find_by_id_endpoint(user_id: str):
-    return user_service.find_by_id(user_id)
-
-
-@app.get("/user/find_by_username/")
-async def find_by_username_endpoint(username: str):
-    return user_service.find_by_username(username)
-
-
-@app.get("/user/find_all/")
-async def find_all_endpoint():
-    return user_service.find_all()
-
+app.include_router(user_router, prefix="/user", tags=["Users"])
+app.include_router(track_router, prefix="/track", tags=["Tracks"])
+app.include_router(playback_router, prefix="/playback", tags=["Playback"])
 
 if __name__ == "__main__":
-    import uvicorn
-
     uvicorn.run(app, host="0.0.0.0", port=8000)

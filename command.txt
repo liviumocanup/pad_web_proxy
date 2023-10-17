@@ -1,0 +1,5 @@
+// give the script execute permissions:
+chmod +x generate_protos.sh
+
+// run the script:
+./generate_protos.sh

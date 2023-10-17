@@ -9,7 +9,6 @@ import (
 	"track_service/adapter"
 	"track_service/config"
 	"track_service/database"
-	"track_service/models"
 	"track_service/repositories"
 	"track_service/services"
 )
@@ -24,12 +23,11 @@ func main() {
 	if err != nil {
 		log.Fatalf("Error connecting to database: %v", err)
 	}
-	db.AutoMigrate(&models.Track{})
 
 	trackRepo := repositories.NewTrackRepository(db)
-	trackService := services.NewTrackService(trackRepo)
+	trackService := services.NewTrackService(trackRepo, cfg)
 
-	// Set up your gRPC server and register the TrackService
+	// Set up gRPC server and register the TrackService
 	grpcSrv, listener, err := adapter.NewGrpcServer(cfg, trackService)
 	if err != nil {
 		log.Fatalf("Error creating gRPC server: %v", err)

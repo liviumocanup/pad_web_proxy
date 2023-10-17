@@ -1,5 +1,7 @@
 grpcport: ":50053"
 httpport: ":8082"
+trackhost: "localhost"
+trackgrpcport: ":50052"
 
 dbhost: "localhost"
 dbport: 5432
@@ -9,3 +11,7 @@ dbname: "playbackdb"
 
 jwtsecret: "pad-super-secret-key-3"
 jwtduration: 42
+
+requestTimeout: 5s
+concurrentLimit: 5
+

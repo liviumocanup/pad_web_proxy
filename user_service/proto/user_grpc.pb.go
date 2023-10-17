@@ -22,9 +22,11 @@ type UserServiceClient interface {
 	Register(ctx context.Context, in *UserRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	Login(ctx context.Context, in *UserRequest, opts ...grpc.CallOption) (*JWT, error)
 	Validate(ctx context.Context, in *JWT, opts ...grpc.CallOption) (*UserResponse, error)
-	FindById(ctx context.Context, in *IdRequest, opts ...grpc.CallOption) (*UserResponse, error)
+	FindById(ctx context.Context, in *UserIdRequest, opts ...grpc.CallOption) (*UserResponse, error)
 	FindByUsername(ctx context.Context, in *UsernameRequest, opts ...grpc.CallOption) (*UserResponse, error)
 	FindAll(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*UserListResponse, error)
+	DeleteById(ctx context.Context, in *UserIdRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	Status(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*StatusResponse, error)
 }
 
 type userServiceClient struct {
@@ -62,7 +64,7 @@ func (c *userServiceClient) Validate(ctx context.Context, in *JWT, opts ...grpc.
 	return out, nil
 }
 
-func (c *userServiceClient) FindById(ctx context.Context, in *IdRequest, opts ...grpc.CallOption) (*UserResponse, error) {
+func (c *userServiceClient) FindById(ctx context.Context, in *UserIdRequest, opts ...grpc.CallOption) (*UserResponse, error) {
 	out := new(UserResponse)
 	err := c.cc.Invoke(ctx, "/UserService/FindById", in, out, opts...)
 	if err != nil {
@@ -89,6 +91,24 @@ func (c *userServiceClient) FindAll(ctx context.Context, in *emptypb.Empty, opts
 	return out, nil
 }
 
+func (c *userServiceClient) DeleteById(ctx context.Context, in *UserIdRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+	out := new(emptypb.Empty)
+	err := c.cc.Invoke(ctx, "/UserService/DeleteById", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *userServiceClient) Status(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*StatusResponse, error) {
+	out := new(StatusResponse)
+	err := c.cc.Invoke(ctx, "/UserService/Status", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // UserServiceServer is the server API for UserService service.
 // All implementations must embed UnimplementedUserServiceServer
 // for forward compatibility
@@ -96,9 +116,11 @@ type UserServiceServer interface {
 	Register(context.Context, *UserRequest) (*emptypb.Empty, error)
 	Login(context.Context, *UserRequest) (*JWT, error)
 	Validate(context.Context, *JWT) (*UserResponse, error)
-	FindById(context.Context, *IdRequest) (*UserResponse, error)
+	FindById(context.Context, *UserIdRequest) (*UserResponse, error)
 	FindByUsername(context.Context, *UsernameRequest) (*UserResponse, error)
 	FindAll(context.Context, *emptypb.Empty) (*UserListResponse, error)
+	DeleteById(context.Context, *UserIdRequest) (*emptypb.Empty, error)
+	Status(context.Context, *emptypb.Empty) (*StatusResponse, error)
 	mustEmbedUnimplementedUserServiceServer()
 }
 
@@ -115,7 +137,7 @@ func (UnimplementedUserServiceServer) Login(context.Context, *UserRequest) (*JWT
 func (UnimplementedUserServiceServer) Validate(context.Context, *JWT) (*UserResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Validate not implemented")
 }
-func (UnimplementedUserServiceServer) FindById(context.Context, *IdRequest) (*UserResponse, error) {
+func (UnimplementedUserServiceServer) FindById(context.Context, *UserIdRequest) (*UserResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method FindById not implemented")
 }
 func (UnimplementedUserServiceServer) FindByUsername(context.Context, *UsernameRequest) (*UserResponse, error) {
@@ -123,6 +145,12 @@ func (UnimplementedUserServiceServer) FindByUsername(context.Context, *UsernameR
 }
 func (UnimplementedUserServiceServer) FindAll(context.Context, *emptypb.Empty) (*UserListResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method FindAll not implemented")
+}
+func (UnimplementedUserServiceServer) DeleteById(context.Context, *UserIdRequest) (*emptypb.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteById not implemented")
+}
+func (UnimplementedUserServiceServer) Status(context.Context, *emptypb.Empty) (*StatusResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Status not implemented")
 }
 func (UnimplementedUserServiceServer) mustEmbedUnimplementedUserServiceServer() {}
 
@@ -192,7 +220,7 @@ func _UserService_Validate_Handler(srv interface{}, ctx context.Context, dec fun
 }
 
 func _UserService_FindById_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(IdRequest)
+	in := new(UserIdRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -204,7 +232,7 @@ func _UserService_FindById_Handler(srv interface{}, ctx context.Context, dec fun
 		FullMethod: "/UserService/FindById",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(UserServiceServer).FindById(ctx, req.(*IdRequest))
+		return srv.(UserServiceServer).FindById(ctx, req.(*UserIdRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -245,6 +273,42 @@ func _UserService_FindAll_Handler(srv interface{}, ctx context.Context, dec func
 	return interceptor(ctx, in, info, handler)
 }
 
+func _UserService_DeleteById_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UserIdRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserServiceServer).DeleteById(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/UserService/DeleteById",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserServiceServer).DeleteById(ctx, req.(*UserIdRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _UserService_Status_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(emptypb.Empty)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserServiceServer).Status(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/UserService/Status",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserServiceServer).Status(ctx, req.(*emptypb.Empty))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // UserService_ServiceDesc is the grpc.ServiceDesc for UserService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -276,7 +340,15 @@ var UserService_ServiceDesc = grpc.ServiceDesc{
 			MethodName: "FindAll",
 			Handler:    _UserService_FindAll_Handler,
 		},
+		{
+			MethodName: "DeleteById",
+			Handler:    _UserService_DeleteById_Handler,
+		},
+		{
+			MethodName: "Status",
+			Handler:    _UserService_Status_Handler,
+		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "proto/user.proto",
+	Metadata: "user.proto",
 }

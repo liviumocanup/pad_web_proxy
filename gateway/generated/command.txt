@@ -1,1 +1,0 @@
-python -m grpc_tools.protoc -I../user_service/proto --python_out=./generated --grpc_python_out=./generated ../user_service/proto/user.proto

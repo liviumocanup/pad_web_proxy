@@ -1,10 +1,7 @@
 import redis
+from config.config import config
 
-REDIS_HOST = "localhost"
-REDIS_PORT = 6379
-
-# Initialize a Redis client
-redis_client = redis.StrictRedis(host=REDIS_HOST, port=REDIS_PORT, db=0)
+redis_client = redis.StrictRedis(host=config.REDIS_HOST, port=config.REDIS_PORT, db=0)
 
 
 def set(key: str, value: str, expiration: int = None):
