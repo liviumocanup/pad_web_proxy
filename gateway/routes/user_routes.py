@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Body, Depends
 from models.user_models import UserRequest, JWT
-from services.auth import get_current_user_id
+from utils.priviliges_utils import get_current_user_id
 from services.user_service import UserService
 from config.config import config
 import json

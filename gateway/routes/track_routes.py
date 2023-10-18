@@ -4,7 +4,7 @@ import json
 
 from models.track_models import TrackMetadata, EditTrackRequest
 from services.track_service import TrackService
-from services.auth import get_current_user_id, authorize_track
+from utils.priviliges_utils import get_current_user_id, authorize_track
 from utils import s3_utils
 from config.config import config
 from services import cache

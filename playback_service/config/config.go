@@ -24,6 +24,7 @@ type Config struct {
 
 	RequestTimeout  time.Duration `yaml:"requestTimeout"`
 	ConcurrentLimit int           `yaml:"concurrentLimit"`
+	CriticalLoad    int           `yaml:"criticalLoad"`
 }
 
 func LoadConfig() (*Config, error) {

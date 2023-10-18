@@ -1,0 +1,16 @@
+// check concurrency limit and task timeout
+ghz --proto=../proto/track.proto \
+    --call=TrackService.Upload \
+    --insecure \
+    --data-file=payload.json \
+    -c 10 -n 100 \
+    localhost:50052
+
+// check health and monitoring for critical payload
+ghz --proto=../proto/track.proto \
+    --call=TrackService.Upload \
+    --insecure \
+    --data-file=payload.json \
+    -c 10 -n 6000 \
+    -z 10s \
+    localhost:50052

@@ -10,7 +10,9 @@ import (
 	"playback_service/database"
 	"playback_service/repositories"
 	"playback_service/services"
+	"playback_service/utils"
 	"syscall"
+	"time"
 )
 
 func main() {
@@ -25,7 +27,10 @@ func main() {
 	}
 
 	playbackRepo := repositories.NewPlaybackRepository(db)
-	trackServiceClient, err := services.NewTrackServiceClient(cfg.TrackHost + cfg.TrackGRPCPort)
+
+	cbtimeout := time.Duration(float64(cfg.RequestTimeout) * 3.5)
+	circuitBreaker := utils.NewCircuitBreaker(3, cbtimeout)
+	trackServiceClient, err := services.NewTrackServiceClient(cfg.TrackHost+cfg.TrackGRPCPort, circuitBreaker)
 	if err != nil {
 		log.Fatalf("Error creating gRPC server: %v", err)
 	}

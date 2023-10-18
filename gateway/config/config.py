@@ -19,6 +19,7 @@ class Config:
     BUCKET_NAME = os.environ.get("BUCKET_NAME", "tracks-bucket-pad")
     TIMEOUT = extract_port(os.environ.get("TIMEOUT", "5"))
     CACHE_INVALIDATION_TIME = extract_port(os.environ.get("CACHE_INVALIDATION_TIME", "10"))
+    CIRCUIT_FAIL_MAX = extract_port(os.environ.get("CIRCUIT_FAIL_MAX", "3"))
 
 
 config = Config()

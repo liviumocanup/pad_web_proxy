@@ -8,6 +8,7 @@ import (
 	"gorm.io/gorm"
 	"log"
 	"strconv"
+	"time"
 	"track_service/config"
 	"track_service/models"
 	"track_service/repositories"
@@ -36,13 +37,24 @@ func NewTrackService(repository repositories.TrackRepository, cfg *config.Config
 }
 
 type trackService struct {
-	repository repositories.TrackRepository
-	cfg        *config.Config
+	repository      repositories.TrackRepository
+	cfg             *config.Config
+	requestsCounter int64
+	lastRequestTime time.Time
 }
 
 func (s *trackService) Upload(ctx context.Context, metadata models.TrackMetadata) (*models.TrackResponse, error) {
+	s.MonitorRequests()
 	ctx, cancel := context.WithTimeout(ctx, s.cfg.RequestTimeout)
 	defer cancel()
+
+	////TEST FOR CONCURRENT TASK LIMIT
+	//select {
+	//case <-time.After(2 * time.Second):
+	//	fmt.Println("Sleep Over.....")
+	//case <-ctx.Done():
+	//	return nil, ctx.Err()
+	//}
 
 	existingTrack, err := s.repository.GetByTitleAndUserId(metadata.Title, metadata.UserID)
 	if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
@@ -73,6 +85,7 @@ func (s *trackService) Upload(ctx context.Context, metadata models.TrackMetadata
 }
 
 func (s *trackService) GetInfoById(ctx context.Context, request models.TrackIdRequest) (*models.TrackInfoResponse, error) {
+	s.MonitorRequests()
 	ctx, cancel := context.WithTimeout(ctx, s.cfg.RequestTimeout)
 	defer cancel()
 
@@ -93,6 +106,7 @@ func (s *trackService) GetInfoById(ctx context.Context, request models.TrackIdRe
 }
 
 func (s *trackService) EditInfo(ctx context.Context, request models.EditTrackRequest) error {
+	s.MonitorRequests()
 	ctx, cancel := context.WithTimeout(ctx, s.cfg.RequestTimeout)
 	defer cancel()
 
@@ -116,6 +130,7 @@ func (s *trackService) EditInfo(ctx context.Context, request models.EditTrackReq
 }
 
 func (s *trackService) DeleteById(ctx context.Context, request models.TrackIdRequest) error {
+	s.MonitorRequests()
 	ctx, cancel := context.WithTimeout(ctx, s.cfg.RequestTimeout)
 	defer cancel()
 
@@ -126,6 +141,7 @@ func (s *trackService) DeleteById(ctx context.Context, request models.TrackIdReq
 }
 
 func (s *trackService) FindAll(ctx context.Context) ([]*models.TrackInfoResponse, error) {
+	s.MonitorRequests()
 	ctx, cancel := context.WithTimeout(ctx, s.cfg.RequestTimeout)
 	defer cancel()
 
@@ -151,8 +167,21 @@ func (s *trackService) FindAll(ctx context.Context) ([]*models.TrackInfoResponse
 }
 
 func (s *trackService) Status(ctx context.Context) (string, error) {
+	s.MonitorRequests()
 	ctx, cancel := context.WithTimeout(ctx, s.cfg.RequestTimeout)
 	defer cancel()
 
 	return "ok", nil
+}
+
+func (s *trackService) MonitorRequests() {
+	s.requestsCounter++
+	currentTime := time.Now()
+	if currentTime.Sub(s.lastRequestTime) >= time.Second {
+		if s.requestsCounter >= int64(s.cfg.CriticalLoad) {
+			log.Printf("ALERT: Critical load reached with %d requests in the last second!", s.requestsCounter)
+		}
+		s.requestsCounter = 0
+		s.lastRequestTime = currentTime
+	}
 }

@@ -3,6 +3,7 @@ package services
 import (
 	"context"
 	"errors"
+	"fmt"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"gorm.io/gorm"
@@ -11,6 +12,7 @@ import (
 	"playback_service/models"
 	"playback_service/repositories"
 	"strconv"
+	"time"
 )
 
 type PlaybackService interface {
@@ -42,9 +44,12 @@ type playbackService struct {
 	repository         repositories.PlaybackRepository
 	trackServiceClient TrackServiceClient
 	cfg                *config.Config
+	requestsCounter    int64
+	lastRequestTime    time.Time
 }
 
 func (s *playbackService) CreatePlaylist(ctx context.Context, request models.CreatePlaylistRequest) (*models.PlaylistResponse, error) {
+	s.MonitorRequests()
 	ctx, cancel := context.WithTimeout(ctx, s.cfg.RequestTimeout)
 	defer cancel()
 
@@ -73,6 +78,7 @@ func (s *playbackService) CreatePlaylist(ctx context.Context, request models.Cre
 }
 
 func (s *playbackService) RemovePlaylist(ctx context.Context, request models.RemovePlaylistRequest) error {
+	s.MonitorRequests()
 	ctx, cancel := context.WithTimeout(ctx, s.cfg.RequestTimeout)
 	defer cancel()
 
@@ -104,6 +110,7 @@ func (s *playbackService) RemovePlaylist(ctx context.Context, request models.Rem
 }
 
 func (s *playbackService) AddTracksToPlaylist(ctx context.Context, request models.AddTracksToPlaylistRequest) error {
+	s.MonitorRequests()
 	ctx, cancel := context.WithTimeout(ctx, s.cfg.RequestTimeout)
 	defer cancel()
 
@@ -162,6 +169,7 @@ func (s *playbackService) AddTracksToPlaylist(ctx context.Context, request model
 }
 
 func (s *playbackService) RemoveTracksFromPlaylist(ctx context.Context, request models.RemoveTracksFromPlaylistRequest) error {
+	s.MonitorRequests()
 	ctx, cancel := context.WithTimeout(ctx, s.cfg.RequestTimeout)
 	defer cancel()
 
@@ -199,16 +207,17 @@ func (s *playbackService) RemoveTracksFromPlaylist(ctx context.Context, request 
 }
 
 func (s *playbackService) GetPlaylistById(ctx context.Context, request models.PlaylistIdRequest) (*models.PlaylistResponse, error) {
+	s.MonitorRequests()
 	ctx, cancel := context.WithTimeout(ctx, s.cfg.RequestTimeout)
 	defer cancel()
 
-	// TEST FOR CONCURRENT TASK LIMIT
-	//select {
-	//case <-time.After(1 * time.Second):
-	//	fmt.Println("Sleep Over.....")
-	//case <-ctx.Done():
-	//	return nil, ctx.Err()
-	//}
+	////TEST FOR CONCURRENT TASK LIMIT
+	select {
+	case <-time.After(2 * time.Second):
+		fmt.Println("Sleep Over.....")
+	case <-ctx.Done():
+		return nil, ctx.Err()
+	}
 
 	playlistIdUint, err := strconv.Atoi(request.PlaylistId)
 	if err != nil {
@@ -236,6 +245,7 @@ func (s *playbackService) GetPlaylistById(ctx context.Context, request models.Pl
 }
 
 func (s *playbackService) PlayPlaylist(ctx context.Context, request models.PlaylistIdRequest) (*models.PlayPlaylistResponse, error) {
+	s.MonitorRequests()
 	ctx, cancel := context.WithTimeout(ctx, s.cfg.RequestTimeout)
 	defer cancel()
 
@@ -277,8 +287,21 @@ func isTrackInPlaylist(trackID string, tracks []models.PlaylistTrack) bool {
 }
 
 func (s *playbackService) Status(ctx context.Context) (string, error) {
+	s.MonitorRequests()
 	ctx, cancel := context.WithTimeout(ctx, s.cfg.RequestTimeout)
 	defer cancel()
 
 	return "ok", nil
+}
+
+func (s *playbackService) MonitorRequests() {
+	s.requestsCounter++
+	currentTime := time.Now()
+	if currentTime.Sub(s.lastRequestTime) >= time.Second {
+		if s.requestsCounter >= int64(s.cfg.CriticalLoad) {
+			log.Printf("ALERT: Critical load reached with %d requests in the last second!", s.requestsCounter)
+		}
+		s.requestsCounter = 0
+		s.lastRequestTime = currentTime
+	}
 }

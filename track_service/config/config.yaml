@@ -12,3 +12,4 @@ jwtduration: 42
 
 requestTimeout: 5s
 concurrentLimit: 5
+criticalLoad: 6

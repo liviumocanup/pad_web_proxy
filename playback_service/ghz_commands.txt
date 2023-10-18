@@ -1,0 +1,18 @@
+ghz --insecure --proto ../proto/playback.proto --call PlaybackService.GetPlaylistById -c 10 -n 100 -d "$(cat payload.json)" localhost:50053
+
+// check concurrency limit and task timeout
+ghz --proto=../proto/playback.proto \
+    --call=PlaybackService.GetPlaylistById \
+    --insecure \
+    --data-file=payload.json \
+    -c 10 -n 100 \
+    localhost:50053
+
+// check health and monitoring for critical payload
+ghz --proto=../proto/playback.proto \
+    --call=PlaybackService.GetPlaylistById \
+    --insecure \
+    --data-file=payload.json \
+    -c 10 -n 100 \
+    -z 10s \
+    localhost:50053

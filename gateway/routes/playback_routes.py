@@ -3,7 +3,7 @@ from urllib.parse import unquote
 from fastapi import APIRouter, Body, Depends, HTTPException
 from models.playback_models import (CreatePlaylistRequest,
                                     AddTracksToPlaylistRequest, RemoveTracksFromPlaylistRequest, RemovePlaylistRequest)
-from services.auth import get_current_user_id
+from utils.priviliges_utils import get_current_user_id
 from services.playback_service import PlaybackService
 from utils.s3_utils import download_file
 from services import cache

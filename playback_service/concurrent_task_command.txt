@@ -1,1 +1,0 @@
-ghz --insecure --proto ../proto/playback.proto --call PlaybackService.GetPlaylistById -c 10 -n 100 -d "$(cat payload.json)" localhost:50053
