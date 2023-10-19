@@ -3,6 +3,7 @@ package services
 import (
 	"context"
 	"errors"
+	"fmt"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"gorm.io/gorm"
@@ -48,13 +49,13 @@ func (s *trackService) Upload(ctx context.Context, metadata models.TrackMetadata
 	ctx, cancel := context.WithTimeout(ctx, s.cfg.RequestTimeout)
 	defer cancel()
 
-	////TEST FOR CONCURRENT TASK LIMIT
-	//select {
-	//case <-time.After(2 * time.Second):
-	//	fmt.Println("Sleep Over.....")
-	//case <-ctx.Done():
-	//	return nil, ctx.Err()
-	//}
+	//TEST FOR CONCURRENT TASK LIMIT
+	select {
+	case <-time.After(1 * time.Second):
+		fmt.Println("Sleep Over.....")
+	case <-ctx.Done():
+		return nil, ctx.Err()
+	}
 
 	existingTrack, err := s.repository.GetByTitleAndUserId(metadata.Title, metadata.UserID)
 	if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {

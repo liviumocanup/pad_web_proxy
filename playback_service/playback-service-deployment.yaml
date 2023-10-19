@@ -14,7 +14,14 @@ spec:
     spec:
       containers:
         - name: playback-service-container
-          image: emporion97/playback-service:latest
+          image: emporion97/playback-service:777
           imagePullPolicy: Always
           ports:
             - containerPort: 50053
+          env:
+            - name: REQUEST_TIMEOUT
+              value: "5s"
+            - name: CONCURRENT_LIMIT
+              value: "5"
+            - name: CRITICAL_LOAD
+              value: "6"

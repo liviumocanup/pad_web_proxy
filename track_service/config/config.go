@@ -34,6 +34,11 @@ func LoadConfig() (*Config, error) {
 		return nil, err
 	}
 
+	viper.AutomaticEnv()
+	viper.SetDefault("RequestTimeout", viper.GetDuration("REQUEST_TIMEOUT"))
+	viper.SetDefault("ConcurrentLimit", viper.GetInt("CONCURRENT_LIMIT"))
+	viper.SetDefault("CriticalLoad", viper.GetInt("CRITICAL_LOAD"))
+
 	conf := &Config{}
 	if err := viper.Unmarshal(conf); err != nil {
 		log.Fatalf("Unable to decode into struct, %v", err)

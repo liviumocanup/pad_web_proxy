@@ -48,7 +48,8 @@ class CircuitBreaker:
                         self.transition(CircuitBreakerState.CLOSED)
                 return result
             except HTTPException as e:
-                if "DNS resolution failed" in e.detail or "failed to connect to all addresses" in e.detail:
+                print(e.detail)
+                if "DNS resolution failed" in e.detail or "failed to connect to all addresses" in e.detail or "Deadline Exceeded" in e.detail:
                     self.failures += 1
                     if self.failures >= self.fail_max:
                         self.transition(CircuitBreakerState.OPEN)

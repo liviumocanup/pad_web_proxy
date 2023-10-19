@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: gateway
-          image: emporion97/gateway:latest
+          image: emporion97/gateway:777
           imagePullPolicy: Always
           env:
             - name: AWS_ACCESS_KEY
@@ -27,6 +27,8 @@ spec:
                 secretKeyRef:
                   name: aws-credentials
                   key: AWS_SECRET_KEY
+            - name: TIMEOUT
+              value: "1"
           ports:
             - containerPort: 8000
 

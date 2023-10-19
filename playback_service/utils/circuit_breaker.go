@@ -3,6 +3,7 @@ package utils
 import (
 	"errors"
 	"log"
+	"os"
 	"strings"
 	"sync"
 	"time"
@@ -49,11 +50,12 @@ func (cb *CircuitBreaker) Call(fn func() error) error {
 
 	err := fn()
 	if err != nil {
-		if strings.Contains(err.Error(), "connection error") {
+		if strings.Contains(err.Error(), "connection error") || strings.Contains(err.Error(), "request timeout") {
 			cb.failures++
 			if cb.failures >= cb.failMax {
-				cb.state = OPEN
-				cb.lastFailure = time.Now()
+				//cb.state = OPEN
+				//cb.lastFailure = time.Now()
+				cb.KillService()
 			}
 		}
 		return err
@@ -66,4 +68,9 @@ func (cb *CircuitBreaker) Call(fn func() error) error {
 	}
 
 	return nil
+}
+
+func (cb *CircuitBreaker) KillService() {
+	log.Println("Threshold reached. Killing service...")
+	os.Exit(1) // Exit the service
 }

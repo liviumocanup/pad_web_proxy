@@ -14,7 +14,14 @@ spec:
     spec:
       containers:
         - name: track-service-container
-          image: emporion97/track-service:latest
+          image: emporion97/track-service:777
           imagePullPolicy: Always
           ports:
             - containerPort: 50052
+          env:
+            - name: REQUEST_TIMEOUT
+              value: "10s"
+            - name: CONCURRENT_LIMIT
+              value: "2"
+            - name: CRITICAL_LOAD
+              value: "60"

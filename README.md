@@ -37,6 +37,12 @@ kubectl apply -f track_service/track-service-svc.yaml
 kubectl apply -f user_service/mysql-deployment.yaml
 kubectl apply -f user_service/user-service-deployment.yaml
 kubectl apply -f user_service/user-service-svc.yaml
+
+# Load Balancing
+kubectl apply -f gateway/gateway-destinationrule.yaml
+kubectl apply -f user_service/user-service-destinationrule.yaml
+kubectl apply -f track_service/track-service-destinationrule.yaml
+kubectl apply -f playback_service/playback-service-destinationrule.yaml
 ```
 3. Monitor the Services
 
@@ -44,6 +50,8 @@ Wait a bit until services are running.
 ```bash
 kubectl get pods
 kubectl get services
+
+kubectl get destinationrule
 ```
 
 4. Get gateway URL
@@ -74,6 +82,12 @@ kubectl delete -f track_service/t-postgres-deployment.yaml
 kubectl delete -f user_service/user-service-svc.yaml
 kubectl delete -f user_service/user-service-deployment.yaml
 kubectl delete -f user_service/mysql-deployment.yaml
+
+# Load Balancing
+kubectl delete -f gateway/gateway-destinationrule.yaml
+kubectl delete -f user_service/user-service-destinationrule.yaml
+kubectl delete -f track_service/track-service-destinationrule.yaml
+kubectl delete -f playback_service/playback-service-destinationrule.yaml
 ```
 
 ## Endpoints (postman.json)

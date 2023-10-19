@@ -4,7 +4,7 @@ ghz --proto=../proto/track.proto \
     --insecure \
     --data-file=payload.json \
     -c 10 -n 100 \
-    localhost:50052
+    192.168.58.2:30766
 
 // check health and monitoring for critical payload
 ghz --proto=../proto/track.proto \
@@ -13,4 +13,10 @@ ghz --proto=../proto/track.proto \
     --data-file=payload.json \
     -c 10 -n 6000 \
     -z 10s \
-    localhost:50052
+    192.168.58.2:32277
+
+// for host in kuber use
+// minikube ip
+
+// for port in kuber use
+// kubectl get service track-service -o=jsonpath='{.spec.ports[0].nodePort}'

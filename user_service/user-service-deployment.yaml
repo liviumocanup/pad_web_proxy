@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: user-service-container
-          image: emporion97/user-service:latest
+          image: emporion97/user-service:777
           imagePullPolicy: Always
           ports:
             - containerPort: 50051

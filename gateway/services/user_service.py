@@ -38,6 +38,7 @@ class UserService:
             raise HTTPException(status_code=400, detail=e.details())
 
     @handle_grpc_error
+    @breaker
     def login(self, request: UserRequest):
         stub = self.stub
         grpc_request = user_pb2.UserRequest(username=request.username, password=request.password)

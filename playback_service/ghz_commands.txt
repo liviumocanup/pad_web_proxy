@@ -13,6 +13,16 @@ ghz --proto=../proto/playback.proto \
     --call=PlaybackService.GetPlaylistById \
     --insecure \
     --data-file=payload.json \
-    -c 10 -n 100 \
+    -c 10 -n 6000 \
     -z 10s \
-    localhost:50053
+    192.168.58.2:31250
+
+// for host in kuber use
+minikube ip
+
+// for port in kuber use
+// kubectl get service playback-service -o=jsonpath='{.spec.ports[0].nodePort}'
+
+kubectl logs playback-service-deployment-7bc66845d9-hh6vl
+kubectl logs playback-service-deployment-7bc66845d9-jr2vb
+kubectl logs playback-service-deployment-7bc66845d9-xhpfl
