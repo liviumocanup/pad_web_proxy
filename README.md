@@ -128,7 +128,7 @@ kubectl delete -f playback_service/playback-service-destinationrule.yaml
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://{{gateway}}/user/?username=test2",
+							"raw": "http://{{gateway}}/user/?username=test",
 							"protocol": "http",
 							"host": [
 								"{{gateway}}"
@@ -140,7 +140,7 @@ kubectl delete -f playback_service/playback-service-destinationrule.yaml
 							"query": [
 								{
 									"key": "username",
-									"value": "test2"
+									"value": "test"
 								}
 							]
 						}
@@ -153,14 +153,14 @@ kubectl delete -f playback_service/playback-service-destinationrule.yaml
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://{{gateway}}/user/2",
+							"raw": "http://{{gateway}}/user/1",
 							"protocol": "http",
 							"host": [
 								"{{gateway}}"
 							],
 							"path": [
 								"user",
-								"2"
+								"1"
 							]
 						}
 					},
@@ -209,15 +209,11 @@ kubectl delete -f playback_service/playback-service-destinationrule.yaml
 							}
 						},
 						"url": {
-							"raw": "http://0.0.0.0:8000/user/login/",
+							"raw": "http://{{gateway}}/user/login/",
 							"protocol": "http",
 							"host": [
-								"0",
-								"0",
-								"0",
-								"0"
+								"{{gateway}}"
 							],
-							"port": "8000",
 							"path": [
 								"user",
 								"login",
@@ -234,7 +230,7 @@ kubectl delete -f playback_service/playback-service-destinationrule.yaml
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2OTc2Nzg3MjQsInVzZXJJZCI6NH0.xKkfjFflvTlg9LZ5d1vayRzNAAg-yDy406yQfNkmrVU\"\n}",
+							"raw": "{\n    \"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2OTc4MzAzMzEsInVzZXJJZCI6MX0.11QbkI6KQQtm-oYNNvdVi7auU7E-uXwv6Vf32Yxb2Yc\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -263,7 +259,7 @@ kubectl delete -f playback_service/playback-service-destinationrule.yaml
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2OTc2Nzg3MjQsInVzZXJJZCI6NH0.xKkfjFflvTlg9LZ5d1vayRzNAAg-yDy406yQfNkmrVU",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2OTc4MTMzNzcsInVzZXJJZCI6MX0.d79ST6AVwt1jZfxs0WGgDEAH3MlPtPr1_6xvrwU1cEU",
 									"type": "string"
 								}
 							]
@@ -295,15 +291,11 @@ kubectl delete -f playback_service/playback-service-destinationrule.yaml
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://0.0.0.0:8000/track/find_all",
+							"raw": "http://{{gateway}}/track/find_all",
 							"protocol": "http",
 							"host": [
-								"0",
-								"0",
-								"0",
-								"0"
+								"{{gateway}}"
 							],
-							"port": "8000",
 							"path": [
 								"track",
 								"find_all"
@@ -318,18 +310,14 @@ kubectl delete -f playback_service/playback-service-destinationrule.yaml
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://0.0.0.0:8000/track/6",
+							"raw": "http://{{gateway}}/track/3",
 							"protocol": "http",
 							"host": [
-								"0",
-								"0",
-								"0",
-								"0"
+								"{{gateway}}"
 							],
-							"port": "8000",
 							"path": [
 								"track",
-								"6"
+								"3"
 							]
 						}
 					},
@@ -343,7 +331,7 @@ kubectl delete -f playback_service/playback-service-destinationrule.yaml
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2OTczNzc2MjQsInVzZXJJZCI6MX0.RZgn5rC7-kr0nIVlSy4upJ4-6NW14oFBA2HeTO157-s",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2OTc3MjYyODcsInVzZXJJZCI6MX0.u-ehaXPT__HQVJqTHGrBAiFnQ82HQs37W-NZ7A5PljA",
 									"type": "string"
 								}
 							]
@@ -351,28 +339,29 @@ kubectl delete -f playback_service/playback-service-destinationrule.yaml
 						"method": "POST",
 						"header": [],
 						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"title\": \"Pre-Test Song 1\",\n    \"artist\": \"Pre-Test Dude\",\n    \"album\": \"Pre-test Album\",\n    \"genre\": \"tests\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/home/liviu/Downloads/Animal-Crossing-Wild-World.mp3"
+								},
+								{
+									"key": "request",
+									"value": "{\n    \"title\": \"Cozy AC\",\n    \"artist\": \"Doodles\",\n    \"album\": \"S3 working\",\n    \"genre\": \"vibe\"\n}",
+									"type": "text"
 								}
-							}
+							]
 						},
 						"url": {
-							"raw": "http://0.0.0.0:8000/track/upload/",
+							"raw": "http://{{gateway}}/track/upload",
 							"protocol": "http",
 							"host": [
-								"0",
-								"0",
-								"0",
-								"0"
+								"{{gateway}}"
 							],
-							"port": "8000",
 							"path": [
 								"track",
-								"upload",
-								""
+								"upload"
 							]
 						}
 					},
@@ -386,7 +375,7 @@ kubectl delete -f playback_service/playback-service-destinationrule.yaml
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2OTczNzc2MjQsInVzZXJJZCI6MX0.RZgn5rC7-kr0nIVlSy4upJ4-6NW14oFBA2HeTO157-s",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2OTc4MTMzNzcsInVzZXJJZCI6MX0.d79ST6AVwt1jZfxs0WGgDEAH3MlPtPr1_6xvrwU1cEU",
 									"type": "string"
 								}
 							]
@@ -395,7 +384,7 @@ kubectl delete -f playback_service/playback-service-destinationrule.yaml
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"trackId\": \"5\",\n    \"metadata\": {\n        \"title\": \"Pre-Test Edit Song 1\",\n        \"artist\": \"Pre-Test Dude\",\n        \"album\": \"Pre-test Edit Album\",\n        \"genre\": \"tests\"\n    }\n}",
+							"raw": "{\n    \"trackId\": \"23\",\n    \"metadata\": {\n        \"title\": \"Pre-Test S3 Song 2\",\n        \"artist\": \"Pre-Test S3 2\",\n        \"album\": \"Pre-test S3 2\",\n        \"genre\": \"testS3s\"\n    }\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -403,19 +392,14 @@ kubectl delete -f playback_service/playback-service-destinationrule.yaml
 							}
 						},
 						"url": {
-							"raw": "http://0.0.0.0:8000/track/edit_info/",
+							"raw": "http://{{gateway}}/track/edit",
 							"protocol": "http",
 							"host": [
-								"0",
-								"0",
-								"0",
-								"0"
+								"{{gateway}}"
 							],
-							"port": "8000",
 							"path": [
 								"track",
-								"edit_info",
-								""
+								"edit"
 							]
 						}
 					},
@@ -429,7 +413,7 @@ kubectl delete -f playback_service/playback-service-destinationrule.yaml
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2OTczNzc2MjQsInVzZXJJZCI6MX0.RZgn5rC7-kr0nIVlSy4upJ4-6NW14oFBA2HeTO157-s",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2OTc3MjYyODcsInVzZXJJZCI6MX0.u-ehaXPT__HQVJqTHGrBAiFnQ82HQs37W-NZ7A5PljA",
 									"type": "string"
 								}
 							]
@@ -437,25 +421,14 @@ kubectl delete -f playback_service/playback-service-destinationrule.yaml
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "http://0.0.0.0:8000/track/delete_by_id/?track_id=5",
+							"raw": "http://{{gateway}}/track/2",
 							"protocol": "http",
 							"host": [
-								"0",
-								"0",
-								"0",
-								"0"
+								"{{gateway}}"
 							],
-							"port": "8000",
 							"path": [
 								"track",
-								"delete_by_id",
-								""
-							],
-							"query": [
-								{
-									"key": "track_id",
-									"value": "5"
-								}
+								"2"
 							]
 						}
 					},
@@ -474,7 +447,7 @@ kubectl delete -f playback_service/playback-service-destinationrule.yaml
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2OTc3MjYyODcsInVzZXJJZCI6MX0.u-ehaXPT__HQVJqTHGrBAiFnQ82HQs37W-NZ7A5PljA",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2OTc4MzUwNTAsInVzZXJJZCI6Mn0.MeyZF0zbr9kKE0xBQRBHl6GDP-j4iBBSlTa-wXwbuJo",
 									"type": "string"
 								}
 							]
@@ -483,7 +456,7 @@ kubectl delete -f playback_service/playback-service-destinationrule.yaml
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"name\": \"Working Playlist 1\"\n}",
+							"raw": "{\n    \"name\": \"Working Playlist 3\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -512,7 +485,7 @@ kubectl delete -f playback_service/playback-service-destinationrule.yaml
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2OTc2NjM5MjUsInVzZXJJZCI6MX0.QzD7S87JUeEu7GmK32U95F3E4NiUikza4Ku-oQthsYM",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2OTc4MTMzNzcsInVzZXJJZCI6MX0.d79ST6AVwt1jZfxs0WGgDEAH3MlPtPr1_6xvrwU1cEU",
 									"type": "string"
 								}
 							]
@@ -634,15 +607,11 @@ kubectl delete -f playback_service/playback-service-destinationrule.yaml
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://0.0.0.0:8000/playback/1",
+							"raw": "http://{{gateway}}/playback/1",
 							"protocol": "http",
 							"host": [
-								"0",
-								"0",
-								"0",
-								"0"
+								"{{gateway}}"
 							],
-							"port": "8000",
 							"path": [
 								"playback",
 								"1"
@@ -781,6 +750,26 @@ kubectl delete -f playback_service/playback-service-destinationrule.yaml
 					"response": []
 				}
 			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
 		}
 	],
 	"variable": [
