@@ -128,3 +128,57 @@ TS -- S3
 PS -- PSQL
 
 @enduml
+
+
+
+
+
+--- LAB 2 ---
+@startuml
+
+actor Client
+[API Gateway (Python)] as Gateway
+database "Redis Cache" as Cache
+database PostgreSQL
+database MySQL
+database PostgreSQL as PSQL
+cloud S3
+database "Data Warehouse" as DW
+[ETL] as ETL
+
+[User Service (Go)] as US
+[Track Service (Go)] as TS
+[Playback Service (Go)] as PS
+
+[Prometheus] as P
+[Grafana] as G
+
+Client --> Gateway : REST
+Cache - Gateway
+
+Gateway <---> US : gRPC
+Gateway <---> TS : gRPC
+Gateway <---> PS : gRPC
+
+Gateway <- P : HTTP
+P <- G : HTTP
+P ---> PS : HTTP
+P ---> TS : HTTP
+P ---> US : HTTP
+
+PS .> TS : 2PC / Saga
+PS -[#red,dashed]> TS : Circuit Breaker
+
+
+US -- MySQL : Replication
+TS -- PostgreSQL : Replication
+TS -- S3
+PS -- PSQL : Replication
+
+MySQL <-- ETL
+PostgreSQL <-- ETL
+PSQL <-- ETL
+
+ETL - DW
+@enduml
+

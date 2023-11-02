@@ -90,697 +90,147 @@ kubectl delete -f track_service/track-service-destinationrule.yaml
 kubectl delete -f playback_service/playback-service-destinationrule.yaml
 ```
 
-## Endpoints (postman.json)
-```json
-{
-	"info": {
-		"_postman_id": "28151a59-633d-477d-a359-75fd06cf361a",
-		"name": "PAD",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "18071230"
-	},
-	"item": [
-		{
-			"name": "user_service",
-			"item": [
-				{
-					"name": "FindAll",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://{{gateway}}/user/find_all",
-							"protocol": "http",
-							"host": [
-								"{{gateway}}"
-							],
-							"path": [
-								"user",
-								"find_all"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "FindByUsername",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://{{gateway}}/user/?username=test",
-							"protocol": "http",
-							"host": [
-								"{{gateway}}"
-							],
-							"path": [
-								"user",
-								""
-							],
-							"query": [
-								{
-									"key": "username",
-									"value": "test"
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "FindByID",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://{{gateway}}/user/1",
-							"protocol": "http",
-							"host": [
-								"{{gateway}}"
-							],
-							"path": [
-								"user",
-								"1"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Register",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"username\": \"test\",\n    \"password\": \"1234\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://{{gateway}}/user/register",
-							"protocol": "http",
-							"host": [
-								"{{gateway}}"
-							],
-							"path": [
-								"user",
-								"register"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Login",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"username\": \"test\",\n    \"password\": \"1234\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://{{gateway}}/user/login/",
-							"protocol": "http",
-							"host": [
-								"{{gateway}}"
-							],
-							"path": [
-								"user",
-								"login",
-								""
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Validate",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2OTc4MzAzMzEsInVzZXJJZCI6MX0.11QbkI6KQQtm-oYNNvdVi7auU7E-uXwv6Vf32Yxb2Yc\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://{{gateway}}/user/validate",
-							"protocol": "http",
-							"host": [
-								"{{gateway}}"
-							],
-							"path": [
-								"user",
-								"validate"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "DeleteByID",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2OTc4MTMzNzcsInVzZXJJZCI6MX0.d79ST6AVwt1jZfxs0WGgDEAH3MlPtPr1_6xvrwU1cEU",
-									"type": "string"
-								}
-							]
-						},
-						"method": "DELETE",
-						"header": [],
-						"url": {
-							"raw": "http://{{gateway}}/user/4",
-							"protocol": "http",
-							"host": [
-								"{{gateway}}"
-							],
-							"path": [
-								"user",
-								"4"
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "track_service",
-			"item": [
-				{
-					"name": "FindAll",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://{{gateway}}/track/find_all",
-							"protocol": "http",
-							"host": [
-								"{{gateway}}"
-							],
-							"path": [
-								"track",
-								"find_all"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "GetInfoByID",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://{{gateway}}/track/3",
-							"protocol": "http",
-							"host": [
-								"{{gateway}}"
-							],
-							"path": [
-								"track",
-								"3"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Upload Track",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2OTc3MjYyODcsInVzZXJJZCI6MX0.u-ehaXPT__HQVJqTHGrBAiFnQ82HQs37W-NZ7A5PljA",
-									"type": "string"
-								}
-							]
-						},
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "formdata",
-							"formdata": [
-								{
-									"key": "file",
-									"type": "file",
-									"src": "/home/liviu/Downloads/Animal-Crossing-Wild-World.mp3"
-								},
-								{
-									"key": "request",
-									"value": "{\n    \"title\": \"Cozy AC\",\n    \"artist\": \"Doodles\",\n    \"album\": \"S3 working\",\n    \"genre\": \"vibe\"\n}",
-									"type": "text"
-								}
-							]
-						},
-						"url": {
-							"raw": "http://{{gateway}}/track/upload",
-							"protocol": "http",
-							"host": [
-								"{{gateway}}"
-							],
-							"path": [
-								"track",
-								"upload"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Edit Track Info",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2OTc4MTMzNzcsInVzZXJJZCI6MX0.d79ST6AVwt1jZfxs0WGgDEAH3MlPtPr1_6xvrwU1cEU",
-									"type": "string"
-								}
-							]
-						},
-						"method": "PUT",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"trackId\": \"23\",\n    \"metadata\": {\n        \"title\": \"Pre-Test S3 Song 2\",\n        \"artist\": \"Pre-Test S3 2\",\n        \"album\": \"Pre-test S3 2\",\n        \"genre\": \"testS3s\"\n    }\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://{{gateway}}/track/edit",
-							"protocol": "http",
-							"host": [
-								"{{gateway}}"
-							],
-							"path": [
-								"track",
-								"edit"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "DeleteByID",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2OTc3MjYyODcsInVzZXJJZCI6MX0.u-ehaXPT__HQVJqTHGrBAiFnQ82HQs37W-NZ7A5PljA",
-									"type": "string"
-								}
-							]
-						},
-						"method": "DELETE",
-						"header": [],
-						"url": {
-							"raw": "http://{{gateway}}/track/2",
-							"protocol": "http",
-							"host": [
-								"{{gateway}}"
-							],
-							"path": [
-								"track",
-								"2"
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "playback_service",
-			"item": [
-				{
-					"name": "Create Playlist",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2OTc4MzUwNTAsInVzZXJJZCI6Mn0.MeyZF0zbr9kKE0xBQRBHl6GDP-j4iBBSlTa-wXwbuJo",
-									"type": "string"
-								}
-							]
-						},
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"name\": \"Working Playlist 3\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://{{gateway}}/playback/create",
-							"protocol": "http",
-							"host": [
-								"{{gateway}}"
-							],
-							"path": [
-								"playback",
-								"create"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Remove Playlist",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2OTc4MTMzNzcsInVzZXJJZCI6MX0.d79ST6AVwt1jZfxs0WGgDEAH3MlPtPr1_6xvrwU1cEU",
-									"type": "string"
-								}
-							]
-						},
-						"method": "DELETE",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"playlistId\": \"8\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://{{gateway}}/playback/remove",
-							"protocol": "http",
-							"host": [
-								"{{gateway}}"
-							],
-							"path": [
-								"playback",
-								"remove"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Add Tracks",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2OTc2NjM5MjUsInVzZXJJZCI6MX0.QzD7S87JUeEu7GmK32U95F3E4NiUikza4Ku-oQthsYM",
-									"type": "string"
-								}
-							]
-						},
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"playlistId\": \"1\",\n    \"trackIds\": [\n        \"3\"\n    ]\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://{{gateway}}/playback/add_tracks",
-							"protocol": "http",
-							"host": [
-								"{{gateway}}"
-							],
-							"path": [
-								"playback",
-								"add_tracks"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Remove Tracks",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2OTc2NjM5MjUsInVzZXJJZCI6MX0.QzD7S87JUeEu7GmK32U95F3E4NiUikza4Ku-oQthsYM",
-									"type": "string"
-								}
-							]
-						},
-						"method": "DELETE",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"playlistId\": \"8\",\n    \"trackIds\": [\n        \"20\"\n    ]\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://{{gateway}}/playback/remove_tracks",
-							"protocol": "http",
-							"host": [
-								"{{gateway}}"
-							],
-							"path": [
-								"playback",
-								"remove_tracks"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "GetPlaylistByID",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2OTc2NTUwMDEsInVzZXJJZCI6Mn0.TsQGQXKoQhl4fVAydfBMc-rod6P88tZdTuMklD3gGRc",
-									"type": "string"
-								}
-							]
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://{{gateway}}/playback/1",
-							"protocol": "http",
-							"host": [
-								"{{gateway}}"
-							],
-							"path": [
-								"playback",
-								"1"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Play Playlist",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2OTc2NjM5MjUsInVzZXJJZCI6MX0.QzD7S87JUeEu7GmK32U95F3E4NiUikza4Ku-oQthsYM",
-									"type": "string"
-								}
-							]
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://{{gateway}}/playback/play/8",
-							"protocol": "http",
-							"host": [
-								"{{gateway}}"
-							],
-							"path": [
-								"playback",
-								"play",
-								"8"
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "status",
-			"item": [
-				{
-					"name": "service discovery",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://{{gateway}}/status/discovery",
-							"protocol": "http",
-							"host": [
-								"{{gateway}}"
-							],
-							"path": [
-								"status",
-								"discovery"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "gateway",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://{{gateway}}/status",
-							"protocol": "http",
-							"host": [
-								"{{gateway}}"
-							],
-							"path": [
-								"status"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "user",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://{{gateway}}/user/status",
-							"protocol": "http",
-							"host": [
-								"{{gateway}}"
-							],
-							"path": [
-								"user",
-								"status"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "track",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://{{gateway}}/track/status",
-							"protocol": "http",
-							"host": [
-								"{{gateway}}"
-							],
-							"path": [
-								"track",
-								"status"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "playback",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://{{gateway}}/playback/status",
-							"protocol": "http",
-							"host": [
-								"{{gateway}}"
-							],
-							"path": [
-								"playback",
-								"status"
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		}
-	],
-	"event": [
-		{
-			"listen": "prerequest",
-			"script": {
-				"type": "text/javascript",
-				"exec": [
-					""
-				]
-			}
-		},
-		{
-			"listen": "test",
-			"script": {
-				"type": "text/javascript",
-				"exec": [
-					""
-				]
-			}
-		}
-	],
-	"variable": [
-		{
-			"key": "gateway",
-			"value": "192.168.58.2:30168"
-		}
-	]
-}
-```
-## Checkpoint 1:
+## Lab 2 System Architecture
+![Diagram2](https://github.com/liviumocanup/pad_web_proxy/blob/lab2/diagrams/lab2_diagram.png)
+
+## Endpoints mini-documentation
+
+The endpoints will be described in the order they are expected to be called.
+
+User Service first as we need a Bearer Token for the endpoints in other services.
+Track Service is expected second as we need tracks to efficiently use Playback Service.
+
+With that being said, all the endpoints will work as expected, no matter the order.
+
+### User Service Endpoints:
+
+#### 1. FindAll
+- **Endpoint**: `GET /user/find_all`
+- **Description**: Retrieves a list of all users.
+- **Parameters**: None
+- **Body**: None
+
+#### 2. FindByUsername
+- **Endpoint**: `GET /user/?username={username}`
+- **Description**: Fetches a user by username.
+- **Parameters**: `username`
+- **Body**: None
+
+#### 3. FindByID
+- **Endpoint**: `GET /user/{id}`
+- **Description**: Obtains user information by ID.
+- **Parameters**: `id` (user ID)
+- **Body**: None
+
+#### 4. Register
+- **Endpoint**: `POST /user/register`
+- **Description**: Registers a new user.
+- **Parameters**: None
+- **Body**: JSON with `username` and `password`
+
+#### 5. Login
+- **Endpoint**: `POST /user/login`
+- **Description**: Authenticates a user.
+- **Parameters**: None
+- **Body**: JSON with `username` and `password`
+
+#### 6. Validate
+- **Endpoint**: `POST /user/validate`
+- **Description**: Validates a user's session token. (Exposed for commodity)
+- **Parameters**: None
+- **Body**: JSON with `token`
+
+#### 7. DeleteByID
+- **Endpoint**: `DELETE /user/{id}`
+- **Description**: Deletes a user by ID.
+- **Parameters**: `id` (user ID)
+- **Body**: None
+- **Authorization**: Bearer token required
+
+
+
+### Track Service Endpoints:
+#### 1. FindAll
+- **Endpoint**: `GET /track/find_all`
+- **Description**: Retrieves all tracks.
+- **Parameters**: None
+- **Body**: None
+
+#### 2. GetInfoByID
+- **Endpoint**: `GET /track/{id}`
+- **Description**: Fetches track info by ID.
+- **Parameters**: `id` (track ID)
+- **Body**: None
+
+#### 3. Upload Track
+- **Endpoint**: `POST /track/upload`
+- **Description**: Uploads a track, file in S3 and info in DB.
+- **Parameters**: None
+- **Body**: `formdata` with mp3 file and JSON track info
+- **Authorization**: Bearer token required
+
+#### 4. Edit Track Info
+- **Endpoint**: `PUT /track/edit`
+- **Description**: Edits a track's metadata.
+- **Parameters**: None
+- **Body**: JSON with `trackId` and `metadata`
+- **Authorization**: Bearer token required
+
+#### 5. DeleteByID
+- **Endpoint**: `DELETE /track/{id}`
+- **Description**: Deletes a track by ID.
+- **Parameters**: `id` (track ID)
+- **Body**: None
+- **Authorization**: Bearer token required
+
+
+
+### Playback Service Endpoints:
+
+#### 1. Create Playlist
+- **Endpoint**: `POST /playback/create`
+- **Description**: Creates a new playlist.
+- **Parameters**: None
+- **Body**: JSON with `name` of the playlist
+- **Authorization**: Bearer token required
+
+#### 2. Remove Playlist
+- **Endpoint**: `DELETE /playback/remove`
+- **Description**: Removes a playlist.
+- **Parameters**: None
+- **Body**: JSON with `playlistId`
+- **Authorization**: Bearer token required
+
+#### 3. Add Tracks
+- **Endpoint**: `POST /playback/add_tracks`
+- **Description**: Adds tracks to a playlist.
+- **Parameters**: None
+- **Body**: JSON with `playlistId` and array of `trackIds`
+- **Authorization**: Bearer token required
+
+#### 4. Remove Tracks
+- **Endpoint**: `DELETE /playback/remove_tracks`
+- **Description**: Removes tracks from a playlist.
+- **Parameters**: None
+- **Body**: JSON with `playlistId` and array of `trackIds`
+- **Authorization**: Bearer token required
+
+#### 5. GetPlaylistByID
+- **Endpoint**: `GET /playback/{id}`
+- **Description**: Retrieves a playlist by ID.
+- **Parameters**: `id` (playlist ID)
+- **Body**: None
+- **Authorization**: Bearer token required
+
+#### 6. Play Playlist
+- **Endpoint**: `GET /playback/play/{id}`
+- **Description**: Plays a playlist by ID. Creates a downloads folder in gateway and stores the mp3 files for the playlist, categorized by user-named folders and playlists.
+- **Parameters**: `id` (playlist ID)
+- **Body**: None
+- **Authorization**: Bearer token required
+
+
+## Lab 1 Checkpoint 1:
 
 ### Application Suitability:
 The music streaming service consists implementation through distributed systems is suitable since :
@@ -835,7 +285,7 @@ Real-life examples:
 1. **Database per Service**: Each microservice will manage its own database. This ensures loose coupling, as each service has full control over its data model and is not dependent on other services.
 2. **API for Data Access**: Services will not access each other's databases directly. Instead, they will use the defined APIs to request any required data from another service. This maintains encapsulation and ensures changes to one service's data model don't impact other services.
 
-### Endpoints
+### Conceptually Explained Endpoints (Lab 1 and Deprecated for Lab 2)
 * **User Service**:
     1. User Registration:
         - Endpoint: `/users/register`
