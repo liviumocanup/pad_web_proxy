@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/golang-jwt/jwt/v5"
+	"github.com/rs/zerolog/log"
 	"time"
 )
 
@@ -16,7 +17,7 @@ func GenerateToken(userId uint, secretKey []byte, duration int) (string, error) 
 
 	tokenString, err := token.SignedString(secretKey)
 	if err != nil {
-		println("Error generating signed string:", err)
+		log.Fatal().Err(err).Msg("Error generating signed string.")
 		return "", err
 	}
 
@@ -29,24 +30,24 @@ func ValidateToken(tokenString string, secretKey []byte) (uint, error) {
 	})
 
 	if err != nil {
-		fmt.Println("Error while parsing token:", err)
+		log.Fatal().Err(err).Msg("Error while parsing token.")
 		return 0, err
 	}
 
 	if !token.Valid {
-		println("Token is not valid!")
+		log.Info().Msg("Token is not valid!")
 		return 0, fmt.Errorf("invalid token")
 	}
 
 	claims, ok := token.Claims.(jwt.MapClaims)
 	if !ok {
-		println("couldn't parse claims!")
+		log.Info().Msg("Couldn't parse claims!")
 		return 0, errors.New("couldn't parse claims")
 	}
 
 	userIdFloat, ok := claims["userId"].(float64)
 	if !ok {
-		println("userId claim is not of expected type!")
+		log.Info().Msg("userId claim is not of expected type!")
 		return 0, errors.New("userId claim is not of expected type")
 	}
 

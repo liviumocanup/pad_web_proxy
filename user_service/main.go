@@ -1,7 +1,9 @@
 package main
 
 import (
-	"log"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
+	"github.com/rs/zerolog"
+	"github.com/rs/zerolog/log"
 	"net/http"
 	"os"
 	"os/signal"
@@ -14,34 +16,41 @@ import (
 )
 
 func main() {
+	// Config
 	cfg, err := config.LoadConfig()
 	if err != nil {
-		log.Fatalf("Error loading config: %v", err)
+		log.Fatal().Err(err).Msg("Error loading config.")
 	}
 
+	// Logger
+	logger := zerolog.New(os.Stderr)
+
+	// Database
 	db, err := database.NewConnection(cfg)
 	if err != nil {
-		log.Fatalf("Error connecting to database: %v", err)
+		log.Fatal().Err(err).Msg("Error connecting to database.")
 	}
 
 	userRepo := repositories.NewUserRepository(db)
 	userService := services.NewUserService(userRepo, cfg)
 
 	// Set up gRPC server and register the UserService
-	grpcSrv, listener, err := adapter.NewGrpcServer(cfg, userService)
+	grpcSrv, listener, reg, err := adapter.NewGrpcServer(cfg, userService, logger)
 	if err != nil {
-		log.Fatalf("Error creating gRPC server: %v", err)
+		log.Fatal().Err(err).Msg("Error creating gRPC server")
 	}
 	go func() {
 		if err := grpcSrv.Serve(listener); err != nil {
-			log.Fatalf("Error starting gRPC server: %v", err)
+			log.Fatal().Err(err).Msg("Error starting gRPC server")
 		}
 	}()
 
+	// Start HTTP Server
 	http.HandleFunc("/", statusHandler)
+	http.Handle("/metrics", promhttp.HandlerFor(reg, promhttp.HandlerOpts{}))
 	go func() {
 		if err := http.ListenAndServe(cfg.HTTPPort, nil); err != nil {
-			log.Fatalf("Error starting HTTP server: %v", err)
+			log.Fatal().Err(err).Msg("Error starting HTTP server")
 		}
 	}()
 
@@ -49,14 +58,14 @@ func main() {
 	quit := make(chan os.Signal, 1)
 	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM, syscall.SIGSEGV)
 	<-quit
-	log.Println("Shutting down user server...")
+	log.Info().Msg("Shutting down user server...")
 
 	// Shutdown GRPC server
 	grpcSrv.GracefulStop()
 
 	// Close DB connection
 	if err := database.CloseDB(db); err != nil {
-		log.Fatalf("Failed to close db connection: %v", err)
+		log.Fatal().Err(err).Msg("Failed to close db connection")
 	}
 }
 

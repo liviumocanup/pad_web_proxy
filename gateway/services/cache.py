@@ -1,7 +1,11 @@
-import redis
+from redis.sentinel import Sentinel
 from config.config import config
 
-redis_client = redis.StrictRedis(host=config.REDIS_HOST, port=config.REDIS_PORT, db=0)
+# Initialize Sentinel instance
+sentinel = Sentinel([(config.REDIS_SENTINEL_HOST, config.REDIS_SENTINEL_PORT)], socket_timeout=0.1)
+
+# Connect to master
+redis_client = sentinel.master_for('mymaster', socket_timeout=0.1, db=0)
 
 
 def set(key: str, value: str, expiration: int = None):

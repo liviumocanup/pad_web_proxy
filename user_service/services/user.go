@@ -3,10 +3,10 @@ package services
 import (
 	"context"
 	"errors"
+	"github.com/rs/zerolog/log"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"gorm.io/gorm"
-	"log"
 	"strconv"
 	"user_service/auth"
 	"user_service/config"
@@ -30,7 +30,7 @@ type UserServiceServer struct {
 }
 
 func NewUserService(repository repositories.UserRepository, cfg *config.Config) UserService {
-	log.Println("Creating user service")
+	log.Info().Msg("Creating user service")
 
 	return &userService{
 		repository: repository,
@@ -100,7 +100,7 @@ func (s *userService) Validate(ctx context.Context, jwt models.JWT) (*models.Use
 	// TEST FOR TIMEOUT
 	//select {
 	//case <-time.After(10 * time.Second):
-	//	fmt.Println("Sleep Over.....")
+	//	log.Info().Msg("Sleep Over.....")
 	//case <-ctx.Done():
 	//	return nil, ctx.Err()
 	//}
@@ -129,7 +129,7 @@ func (s *userService) FindById(ctx context.Context, request models.UserIdRequest
 	// TEST FOR CONCURRENT TASK LIMIT
 	//select {
 	//case <-time.After(1 * time.Second):
-	//	fmt.Println("Sleep Over.....")
+	//	log.Info().Msg("Sleep Over.....")
 	//case <-ctx.Done():
 	//	return nil, ctx.Err()
 	//}

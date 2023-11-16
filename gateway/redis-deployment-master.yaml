@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redis-master
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      role: master
+      app: redis
+  template:
+    metadata:
+      labels:
+        role: master
+        app: redis
+    spec:
+      containers:
+      - name: redis
+        image: redis:latest
+        ports:
+        - containerPort: 6379
+        volumeMounts:
+        - name: redis-storage
+          mountPath: /data
+      volumes:
+      - name: redis-storage
+        persistentVolumeClaim:
+          claimName: redis-master-pvc
+
+---
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: redis-master-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  storageClassName: standard
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: redis-master-service
+spec:
+  ports:
+  - port: 6379
+  selector:
+    role: master
+    app: redis

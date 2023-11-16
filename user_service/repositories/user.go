@@ -1,8 +1,8 @@
 package repositories
 
 import (
+	"github.com/rs/zerolog/log"
 	"gorm.io/gorm"
-	"log"
 	"user_service/models"
 )
 
@@ -15,7 +15,7 @@ type UserRepository interface {
 }
 
 func NewUserRepository(db *gorm.DB) UserRepository {
-	log.Println("Creating new user repository")
+	log.Info().Msg("Creating new user repository")
 
 	return &userRepository{
 		db: db,
