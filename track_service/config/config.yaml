@@ -1,7 +1,7 @@
 grpcport: ":50052"
 httpport: ":8081"
 
-dbhost: "localhost"
+dbhost: "my-release"
 dbport: 5432
 dbuser: "liviu"
 dbpassword: "1234"

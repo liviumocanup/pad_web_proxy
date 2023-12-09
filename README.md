@@ -49,6 +49,18 @@ kubectl apply -f user_service/user-service-destinationrule.yaml
 kubectl apply -f track_service/track-service-destinationrule.yaml
 kubectl apply -f playback_service/playback-service-destinationrule.yaml
 ```
+```bash
+helm repo add grafana https://grafana.github.io/helm-charts
+helm repo update
+helm install my-loki grafana/loki-stack
+
+helm install my-grafana grafana/grafana
+kubectl get secret my-grafana -o jsonpath="{.data.admin-password}" | base64 --decode ; echo
+
+kubectl port-forward service/my-grafana 3000:80
+
+helm install my-release timescale/timescaledb-single -f failover-values.yaml
+```
 3. Monitor the Services
 
 Wait a bit until services are running.

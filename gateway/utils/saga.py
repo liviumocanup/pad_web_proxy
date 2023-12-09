@@ -19,7 +19,7 @@ class SagaCoordinator:
                 raise HTTPException(status_code=400, detail="Failed to delete track")
 
             # Step 2: Delete user
-            delete_user_response = self.user_service.delete_by_id(user_id, 1)
+            delete_user_response = self.user_service.delete_by_id(user_id, user_id)
             print("delete_user_response", delete_user_response)
             if delete_user_response["status"] != "success":
                 raise HTTPException(status_code=400, detail="Failed to delete user")
