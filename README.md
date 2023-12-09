@@ -20,7 +20,9 @@ minikube start
 Dockerfiles are already pushed to https://hub.docker.com/repositories/emporion97
 ```bash
 # Gateway Service
-kubectl apply -f gateway/redis-deployment.yaml
+kubectl apply -f gateway/redis-1-deployment.yaml
+kubectl apply -f gateway/redis-2-deployment.yaml
+kubectl apply -f gateway/redis-3-deployment.yaml
 kubectl apply -f gateway/gateway-deployment.yaml
 
 # Playback Service
@@ -29,7 +31,10 @@ kubectl apply -f playback_service/playback-service-deployment.yaml
 kubectl apply -f playback_service/playback-service-svc.yaml
 
 # Track Service
-kubectl apply -f track_service/t-postgres-deployment.yaml
+kubectl apply -f track_service/pvc.yaml
+helm repo add bitnami https://charts.bitnami.com/bitnami
+helm repo update
+helm install my-release bitnami/postgresql -f values.yaml
 kubectl apply -f track_service/track-service-deployment.yaml
 kubectl apply -f track_service/track-service-svc.yaml
 
@@ -66,7 +71,9 @@ in order to know on what address to send requests.
 ```bash
 # Gateway Service
 kubectl delete -f gateway/gateway-deployment.yaml
-kubectl delete -f gateway/redis-deployment.yaml
+kubectl delete -f gateway/redis-1-deployment.yaml
+kubectl delete -f gateway/redis-2-deployment.yaml
+kubectl delete -f gateway/redis-3-deployment.yaml
 
 # Playback Service
 kubectl delete -f playback_service/playback-service-svc.yaml
@@ -74,7 +81,8 @@ kubectl delete -f playback_service/playback-service-deployment.yaml
 kubectl delete -f playback_service/p-postgres-deployment.yaml
 
 # Track Service
-kubectl delete -f track_service/track-service-svc.yaml
+kubectl delete -f track_service/pvc.yaml
+helm uninstall my-release
 kubectl delete -f track_service/track-service-deployment.yaml
 kubectl delete -f track_service/t-postgres-deployment.yaml
 

@@ -1,7 +1,7 @@
 grpcport: ":50052"
 httpport: ":8081"
 
-dbhost: "t-postgres"
+dbhost: "localhost"
 dbport: 5432
 dbuser: "liviu"
 dbpassword: "1234"

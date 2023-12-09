@@ -43,7 +43,44 @@ class TrackService:
             raise HTTPException(status_code=400, detail=e.details())
 
     @handle_grpc_error
+    def restore_state(self, request: TrackMetadata):
+        stub = self.stub
+
+        grpc_request = common_pb2.TrackMetadata(
+            title=request.title,
+            artist=request.artist,
+            album=request.album,
+            genre=request.genre,
+            userId=request.userId,
+            url=request.url
+        )
+
+        try:
+            response, call_status = stub.Upload.with_call(grpc_request, timeout=config.TIMEOUT)
+            return {"trackId": response.trackId, "url": response.url}
+        except grpc.RpcError as e:
+            raise HTTPException(status_code=400, detail=e.details())
+
+    @handle_grpc_error
     def get_info_by_id(self, track_id: str):
+        stub = self.stub
+        grpc_request = track_pb2.TrackIdRequest(id=track_id)
+        try:
+            response, call_status = stub.GetInfoById.with_call(grpc_request, timeout=config.TIMEOUT)
+            return {
+                "trackId": response.trackId,
+                "title": response.title,
+                "artist": response.artist,
+                "album": response.album,
+                "genre": response.genre,
+                "url": response.url,
+                "userId": response.userId
+            }
+        except grpc.RpcError as e:
+            raise HTTPException(status_code=400, detail=e.details())
+
+    @handle_grpc_error
+    def save_state(self, track_id: str):
         stub = self.stub
         grpc_request = track_pb2.TrackIdRequest(id=track_id)
         try:

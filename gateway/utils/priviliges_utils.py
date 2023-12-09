@@ -4,7 +4,6 @@ from models.user_models import JWT
 from services.track_service import TrackService
 from services.user_service import UserService
 
-
 tracks_instance = TrackService.get_instance()
 users_instance = UserService.get_instance()
 
@@ -32,3 +31,7 @@ def authorize_track(track_id: str, user_id: str = Depends(get_current_user_id)):
     if track["userId"] != user_id:
         raise HTTPException(status_code=403, detail="Not authorized to edit or delete this track.")
     return track
+
+
+def delete_user(user_id: str, current_user_id: str = Depends(get_current_user_id)):
+    return users_instance.delete_by_id(user_id, current_user_id)

@@ -4,13 +4,17 @@ import json
 
 from models.track_models import TrackMetadata, EditTrackRequest
 from services.track_service import TrackService
+from services.user_service import UserService
 from utils.priviliges_utils import get_current_user_id, authorize_track
 from utils import s3_utils
 from config.config import config
 from services import cache
+from utils.saga import SagaCoordinator
 
 router = APIRouter()
 tracks_instance = TrackService.get_instance()
+users_instance = UserService.get_instance()
+saga_coordinator = SagaCoordinator(tracks_instance, users_instance)
 
 
 @router.get("/find_all")
@@ -42,7 +46,7 @@ async def upload_track(file: UploadFile = File(...), request: str = Body(...),
         raise HTTPException(status_code=400, detail="Invalid JSON format for track metadata")
 
     unique_filename = s3_utils.create_unique_filename(user_id, file.filename)
-    s3_utils.upload_file(file, unique_filename)
+    # s3_utils.upload_file(file, unique_filename)
 
     request.userId = user_id
     request.url = f"https://{config.BUCKET_NAME}.s3.amazonaws.com/{unique_filename}"
@@ -80,6 +84,14 @@ async def delete_by_id(track_id: str, user_id: str = Depends(get_current_user_id
 
     s3_utils.delete_file(unique_filename)
     return tracks_instance.delete_by_id(track_id)
+
+
+@router.delete("/delete_track_and_user/{track_id}")
+async def delete_track_and_user(track_id: str, user_id: str = Depends(get_current_user_id)):
+    track_info = authorize_track(track_id, user_id)
+
+    saga_result = await saga_coordinator.execute_saga(track_id, user_id)
+    return saga_result
 
 
 @router.get("/{track_id}")

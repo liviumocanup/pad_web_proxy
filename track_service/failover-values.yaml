@@ -1,0 +1,59 @@
+# values.yaml for TimescaleDB with replication and failover
+
+replicaCount: 4  # Set to 4 to include the primary instance and 3 replicas
+
+image:
+  repository: timescale/timescaledb-ha
+  tag: pg16-all
+  pullPolicy: IfNotPresent
+
+patroni:
+  bootstrap:
+    dcs:
+      postgresql:
+        parameters:
+          max_connections: "100"  # Adjust as needed
+          ssl: 'off'
+  postgresql:
+    pg_hba:
+      - host all all 0.0.0.0/0 md5
+      - local all all peer
+
+secrets:
+  credentials:
+    PATRONI_SUPERUSER_PASSWORD: "1234"  # Replace with your superuser password
+    PATRONI_REPLICATION_PASSWORD: "1234"  # Replace with your replication password
+    PATRONI_admin_PASSWORD: "1234"  # Replace with your admin password
+
+# Adjust persistent volume configuration as needed
+persistentVolumes:
+  data:
+    enabled: true
+    size: 10Gi  # Adjust size as needed
+    storageClass: "standard"  # Replace with your storage class
+    accessModes:
+      - ReadWriteOnce
+
+service:
+  primary:
+    type: ClusterIP
+    port: 5432
+
+  replica:
+    type: ClusterIP
+    port: 5432
+
+# Enable backup if needed
+backup:
+  enabled: false
+
+# Resource requests and limits (adjust as needed)
+resources:
+  requests:
+    cpu: "100m"
+    memory: "128Mi"
+  limits:
+    cpu: "500m"
+    memory: "512Mi"
+
+# Other configurations can be added based on your specific requirements

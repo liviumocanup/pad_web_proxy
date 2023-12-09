@@ -1,0 +1,26 @@
+# values.yaml
+replication:
+  enabled: true
+  slaveReplicas: 4
+
+primary:
+  persistence:
+    existingClaim: "t-postgres-pvc"
+  extraEnvVars:
+    - name: POSTGRES_USER
+      value: "liviu"
+    - name: POSTGRES_PASSWORD
+      value: "1234"
+    - name: POSTGRES_DB
+      value: "tracksdb"
+
+postgresql:
+  image:
+    tag: 13
+
+service:
+  type: ClusterIP
+  ports:
+    - name: postgres
+      port: 5432
+      targetPort: postgresql

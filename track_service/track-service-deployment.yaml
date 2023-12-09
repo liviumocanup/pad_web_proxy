@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: track-service-container
-          image: emporion97/track-service:777
+          image: emporion97/track-service:31
           imagePullPolicy: Always
           ports:
             - containerPort: 50052
